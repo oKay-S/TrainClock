@@ -24,7 +24,8 @@ class Station: #Constructs the station class
       toc = all["operator_name"]
       departureTime = all["aimed_departure_time"]
       destination = all["destination_name"]
+      platform = all["platform"]
 
-      finalString = f"The next train is the {departureTime} {toc} service to {destination}"
+      finalString = f"The next train is the {departureTime} {toc} service to {destination} from Platform {platform}"
 
       return finalString

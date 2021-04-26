@@ -5,3 +5,5 @@
 UK Train Departure Board for your raspberry pi LCD screen.
 
 API Used: transportapi
+
+Copy `config.example.ini` to `config.ini` and add your details to make the clock work.

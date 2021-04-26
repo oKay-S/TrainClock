@@ -24,7 +24,7 @@ def main():  # constucts the main method
             print(Station.updateTrains())
             checktime = Clock.date() + " " + Clock.time()
             lcd.lcd_display_string(checktime, 1)
-            num_cols = 20
+            num_cols = 16
             num_line = 2
             ntrain = Station.updateTrains()
             display.lcd_display_string(ntrain[:num_cols], num_line)

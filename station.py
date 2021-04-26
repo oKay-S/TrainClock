@@ -1,6 +1,11 @@
 import json
 import requests
+import configparser
 
+config = configparser.ConfigParser()		
+config.read("config.ini")
+
+api_details = config["API"]
 
 class Station: #Constructs the station class
   suffix = ""
@@ -14,7 +19,7 @@ class Station: #Constructs the station class
   def updateTrains():
       suffix = Station.updateStation()
       response = requests.get(
-          "https://transportapi.com/v3/uk/train/station/"+ suffix +"/live.json?app_id=d8e690f5&app_key=a64dcf1d1dd8d45481bd33c43bafe55a&darwin=false&train_status=passenger")
+          "https://transportapi.com/v3/uk/train/station/"+ suffix +"/live.json?app_id=" + api_details["id"] + "&app_key=" + api_details["key"] + "&darwin=false&train_status=passenger")
 
       trains = response.json()
       stationName = trains["station_name"]

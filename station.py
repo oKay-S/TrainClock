@@ -6,15 +6,13 @@ config = configparser.ConfigParser()
 config.read("config.ini")
 
 api_details = config["API"]
+station_details = config["STATION"]
 
 class Station: #Constructs the station class
   suffix = ""
   ntrain = ""
   def updateStation(): #Constructs  the Update Station Method
-    f = open("config.txt", "r")
-    suffix = (f.read(3))
-    f.close()
-    return suffix
+    return station_details["station"]
 
   def updateTrains():
       suffix = Station.updateStation()

@@ -21,18 +21,57 @@ def main():  # constucts the main method
         if now != Clock.time():
             now = Clock.time()
             print(Clock.time())
-            print(Station.updateTrains())
-            checktime = Clock.date() + " " + Clock.time()
-            lcd.lcd_display_string(checktime, 1)
+            lcd.lcd_clear()
+            lcd.lcd_display_string(Clock.date(), 1)
+            lcd.lcd_display_string(Clock.time(), 2)
+            time.sleep(10)
+            lcd.lcd_clear()
             num_cols = 16
             num_line = 2
-            ntrain = Station.updateTrains()
-            display.lcd_display_string(ntrain[:num_cols], num_line)
+            traininfo = Station.updateTrainsCalling()
+
+            destinationtime = traininfo[0]
+            platformstatus = traininfo[1]
+            calling = traininfo[2]
+
+            display.lcd_display_string(destinationtime[:num_cols], 1)
+            display.lcd_display_string(platformstatus[:num_cols], 2)
             time.sleep(1)
-            for i in range(len(ntrain) - num_cols + 1):
-                text = ntrain
+            for i in range(len(destinationtime) - num_cols + 1):
+                text = destinationtime
                 text_to_print = text[i:i + num_cols]
-                display.lcd_display_string(text_to_print, num_line)
+                display.lcd_display_string(text_to_print, 1)
                 time.sleep(0.1)
+            time.sleep(5)
+            display.lcd_display_string(destinationtime[:num_cols], 1)
+
+
+            time.sleep(1)
+            for i in range(len(platformstatus) - num_cols + 1):
+                text = platformstatus
+                text_to_print = text[i:i + num_cols]
+                display.lcd_display_string(text_to_print, 2)
+                time.sleep(0.1)
+            time.sleep(5)
+
+            display.lcd_display_string(calling[:num_cols], 2)
+            time.sleep(1)
+            for i in range(len(calling) - num_cols + 1):
+                text = calling
+                text_to_print = text[i:i + num_cols]
+                display.lcd_display_string(text_to_print, 2)
+                time.sleep(0.1)
+
+            lcd.lcd_clear()
+            display.lcd_display_string(destinationtime[:num_cols], 1)
+            display.lcd_display_string(platformstatus[:num_cols], 2)
+            time.sleep(1)
+            for i in range(len(platformstatus) - num_cols + 1):
+                text = platformstatus
+                text_to_print = text[i:i + num_cols]
+                time.sleep(0.1)
+                display.lcd_display_string(text_to_print, 2)
+            display.lcd_display_string(platformstatus[:num_cols], 2)
+            time.sleep(10)
 
 main()  # calls the main method

@@ -2,6 +2,8 @@ import json
 import requests
 import configparser
 
+from requests.auth import HTTPBasicAuth
+
 config = configparser.ConfigParser()		
 config.read("config.ini")
 
@@ -16,50 +18,26 @@ class Station: #Constructs the station class
 
   def updateTrainsCalling():
       suffix = Station.updateStation()
-      response = requests.get(
-          "https://transportapi.com/v3/uk/train/station/"+ suffix +"/live.json?app_id=" + api_details["id"] + "&app_key=" + api_details["key"] + "&darwin=false&train_status=passenger")
+      url = "https://api.rtt.io/api/v1/json/search/" + suffix
+      response = requests.get(url, auth=HTTPBasicAuth(api_details['id'], api_details['key']))
 
       trains = response.json()
-      departures = trains["departures"]
-      all = departures["all"]
-
-      all = all[0]
-      service = all["service"]
-      platform = all["platform"]
-      departuretime = all["aimed_departure_time"]
-      responseSecondary = requests.get(
-          "https://transportapi.com/v3/uk/train/service/" + service + "///timetable.json?app_id="+ api_details["id"] + "&app_key=" + api_details["key"] + "&darwin=false&live=false")
-
-      fullservice = responseSecondary.json()
-      destination = fullservice["destination_name"]
-      toc = fullservice["operator_name"]
-      platform = ""
-      stops = fullservice["stops"]
-      looplen = len(stops)
-      stoppingdestinations = []
-      for i in range(looplen):
-          station = stops[i]
-          if i == 0:
-              departuretime = station["aimed_departure_time"]
-              platform = station["platform"]
-
-              if platform is None:
-                  platform = "Bus"
-              else:
-                  platform = "Platform: " + platform
-
-              continue
-          stationname = station["station_name"]
-          arrivaltime = station["aimed_arrival_time"]
-          stationinfo = stationname + " [" + arrivaltime + "]"
-          stoppingdestinations.append(stationinfo)
+      trains = trains['services']
+      train = trains[0]
+      toc = train['atocName']
+      destinationDetail = train['locationDetail']
+      platform = destinationDetail['platform']
+      departure = destinationDetail['gbttBookedDeparture']
+      destinationName = destinationDetail['destination']
+      destinationName = destinationName[0]
+      destinationName = destinationName['description']
 
 
-      string1 = destination + " " + departuretime
+      string1 = destinationName + " " + departure
       print(string1)
-      string2 = platform
+      string2 = "Platform " + platform
       print(string2)
-      string3 = "Calling at: " + ", ".join(stoppingdestinations) + " (" + toc + ")"
+      string3 = "This is a " + toc + " service"
       print(string3)
       finalstrings = [string1, string2, string3]
       return finalstrings
